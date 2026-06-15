@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template
 from math import sqrt
 from datetime import datetime
+from services.distance_service import calculate_distance
 
 app = Flask('my_distance')
 
@@ -55,7 +56,7 @@ def Calculate():
     startPoint = list(map(lambda y: int(y), request.json['start_point'].split(',')[0:2]))
     EndPoint = tuple(map(lambda x: int(x), request.json['end_point'].split(',')[0:2]))
     
-    result_tmp = sqrt((EndPoint[1] - startPoint[1])**2 + (EndPoint[0] - startPoint[0])**2)
+    result_tmp = calculate_distance(startPoint, EndPoint)
     result =             {
                 'requested_at': datetime.now(),
                 'result_distance': result_tmp,
