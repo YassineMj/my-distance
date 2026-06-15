@@ -65,3 +65,21 @@ def Calculate():
                 'end_point': EndPoint
             }
     return result
+
+from flask import jsonify
+
+@app.route("/api/distance", methods=["POST"])
+def api_distance():
+    data = request.get_json()
+
+    start = parse_point(data["start_point"])
+    end = parse_point(data["end_point"])
+
+    result = calculate_distance(start, end)
+
+    return jsonify({
+        "start_point": start,
+        "end_point": end,
+        "distance": result,
+        "requested_at": datetime.now().isoformat()
+    }), 200
