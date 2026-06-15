@@ -2,6 +2,7 @@ from flask import Flask, request, render_template
 from math import sqrt
 from datetime import datetime
 from services.distance_service import calculate_distance
+from validators.point_validator import parse_point
 
 app = Flask('my_distance')
 
@@ -14,10 +15,10 @@ def html_calculate():
         return render_template('index.html', result=None)
     if request.method == 'POST':
     # Si post, calculer et afficher le résultat
-        eNd = tuple(map(lambda x: int(x), request.form['apoint'].split(',')[0:2]))
-        start = list(map(lambda y: int(y), request.form['bpoint'].split(',')[0:2]))
+        eNd = parse_point(request.form['apoint'])
+        start = parse_point(request.form['bpoint'])
         startPoint = start
-        result_tmp = sqrt((eNd[1] - start[1])**2 + (eNd[0] - startPoint[0])**2)
+        result_tmp = calculate_distance(startPoint, EndPoint)
         EndPoint = eNd
         result =             {
                     'requested_at': datetime.now(),
