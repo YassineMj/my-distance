@@ -3,6 +3,8 @@ from math import sqrt
 from datetime import datetime
 from services.distance_service import calculate_distance
 from validators.point_validator import parse_point
+from flask import jsonify
+
 
 app = Flask('my_distance')
 
@@ -18,8 +20,9 @@ def html_calculate():
         eNd = parse_point(request.form['apoint'])
         start = parse_point(request.form['bpoint'])
         startPoint = start
-        result_tmp = calculate_distance(startPoint, EndPoint)
         EndPoint = eNd
+        result_tmp = calculate_distance(startPoint, EndPoint)
+        
         result =             {
                     'requested_at': datetime.now(),
                     'result_distance': result_tmp,
@@ -66,20 +69,6 @@ def Calculate():
             }
     return result
 
-from flask import jsonify
 
-@app.route("/api/distance", methods=["POST"])
-def api_distance():
-    data = request.get_json()
-
-    start = parse_point(data["start_point"])
-    end = parse_point(data["end_point"])
-
-    result = calculate_distance(start, end)
-
-    return jsonify({
-        "start_point": start,
-        "end_point": end,
-        "distance": result,
-        "requested_at": datetime.now().isoformat()
-    }), 200
+if __name__ == "__main__":
+    app.run(debug=True)
